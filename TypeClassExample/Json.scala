@@ -14,7 +14,7 @@ trait JsonWriter[A] {
 
 sealed trait Earth
 final case class Person(name:String, email:String) extends Earth
-final case class Dog(name:String, email:String) extends Earth
+final case class Pet(name:String, age:Int) extends Earth
 
 object DefaultJsonWriters {
 
@@ -32,12 +32,12 @@ object DefaultJsonWriters {
       )
   }
 
-  implicit val dogJsonWriter = new JsonWriter[Dog] {
-    override def write(dog:Dog):Json =
+  implicit val petJsonWriter = new JsonWriter[Pet] {
+    override def write(pet:Pet):Json =
       JsObject(
         Map(
-          "name" -> JsString(dog.name),
-          "email" -> JsString(dog.email)
+          "name" -> JsString(pet.name),
+          "age" -> JsNumber(pet.age.toDouble)
         )
       )
   }
@@ -46,7 +46,7 @@ object DefaultJsonWriters {
     override def write(e:Earth):Json =
       e match {
         case p @ Person(_,_) => personJsonWriter.write(p)
-        case d @ Dog(_,_) => dogJsonWriter.write(d)
+        case p @ Pet(_,_) => petJsonWriter.write(p)
       }
   }
 
@@ -67,14 +67,14 @@ object JsonSyntax {
         writer.write(p)
   }
 
-  implicit class DogWriter(val d:Dog) extends AnyVal {
-    def write(implicit writer:JsonWriter[Dog]):Json =
+  implicit class PetWriter(val d:Pet) extends AnyVal {
+    def write(implicit writer:JsonWriter[Pet]):Json =
       writer.write(d)
   }
 
-  implicit class EarthWriter(val l:Earth) extends AnyVal {
+  implicit class EarthWriter(val e:Earth) extends AnyVal {
     def write(implicit writer:JsonWriter[Earth]):Json =
-      writer.write(l)
+      writer.write(e)
   }
 
   implicit class ListWriter(val l:List[Earth]) extends AnyVal {

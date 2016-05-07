@@ -5,8 +5,8 @@ object Test extends App {
   import JsonSyntax._
   import DefaultJsonWriters._
 
-  val p = Person("Nils", "simula@oslo.com")
-  val d = Dog("Maxim", "maxin@oslo.com")
+  val p = Person("John", "john@doe.com")
+  val d = Pet("Maxim", 8)
   println(p)
   println(p.write + " " + d.write)
 
