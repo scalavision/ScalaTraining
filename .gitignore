@@ -1,5 +1,8 @@
 *.class
 *.log
+*.idea
+*.classpath
+*.classpath_nb
 
 # sbt specific
 .cache
